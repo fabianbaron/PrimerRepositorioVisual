@@ -47,8 +47,8 @@ namespace Semaforos.Models
 
         public Cliente()
         {
-            Name = "Fabián";
-            LastName = "Barón";
+            Name = "";
+            LastName = "";
         }
 
         private void OnPropertyChanged(String propertyName)

@@ -9,9 +9,9 @@ namespace Semaforos.ViewModels.Commands
 {
     public class SimpleComand : ICommand
     {
+        public ViewModelBase ViewModelBase { get; set; }
         public event EventHandler CanExecuteChanged;
 
-        public ViewModelBase ViewModelBase { get; set; }
 
         public SimpleComand(ViewModelBase viewModel)
         {

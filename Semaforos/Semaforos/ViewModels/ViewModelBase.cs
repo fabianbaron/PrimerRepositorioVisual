@@ -21,5 +21,10 @@ namespace Semaforos.ViewModels
         {
             Debug.WriteLine("Comando...");
         }
+
+        public void ParameterMethod(String parametro)
+        {
+            Debug.WriteLine(parametro);
+        }
     }
 }
