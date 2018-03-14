@@ -16,6 +16,7 @@ namespace Semaforos.ViewModels
         public ViewModelBase()
         {
             this.SimpleComand = new SimpleComand(this);
+            this.Parametro = new Parametro(this);
         }
 
         public void SimpreMethod()

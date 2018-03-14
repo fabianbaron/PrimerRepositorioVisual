@@ -11,12 +11,16 @@ namespace Semaforos.ViewModels.Commands
     {
         public ViewModelBase ModelBase { get; set; }
 
-        public event EventHandler CanExecuteChanged;
-
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="viewModel"></param>
         public Parametro(ViewModelBase viewModel)
         {
             this.ModelBase = viewModel;
         }
+
+        public event EventHandler CanExecuteChanged;
 
         public bool CanExecute(object parameter)
         {
@@ -25,9 +29,9 @@ namespace Semaforos.ViewModels.Commands
                 var s = parameter as String;
                 if (String.IsNullOrEmpty(s))
                 {
-                    return true;
+                    return false;
                 }
-                return false;
+                return true;
             }
             return false;
         }

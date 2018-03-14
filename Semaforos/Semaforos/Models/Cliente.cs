@@ -9,6 +9,7 @@ namespace Semaforos.Models
 {
     class Cliente : INotifyPropertyChanged
     {
+        public event PropertyChangedEventHandler PropertyChanged;
 
         private String nameInnerField;
 
@@ -43,7 +44,6 @@ namespace Semaforos.Models
         }
 
 
-        public event PropertyChangedEventHandler PropertyChanged;
 
         public Cliente()
         {
