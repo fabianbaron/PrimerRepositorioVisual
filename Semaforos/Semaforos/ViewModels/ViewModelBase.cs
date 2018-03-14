@@ -11,6 +11,7 @@ namespace Semaforos.ViewModels
     public class ViewModelBase
     {
         public SimpleComand SimpleComand { get; set; }
+        public Parametro Parametro { get; set; }
 
         public ViewModelBase()
         {

@@ -18,6 +18,9 @@
             <TextBox Text="{Binding Path=Name, Mode=TwoWay}"/>
             <TextBox Text="{Binding LastName, Mode=TwoWay}"/>
             <Button Content="{Binding FullName}" Command="{Binding SimpleComand, Source={StaticResource modelBase}}"/>
+            <Button Content="Parámetro" 
+                    Command="{Binding Parametro, Source={StaticResource modelBase}}" 
+                    CommandParameter="{Binding FullName}"/>
         </StackPanel>        
     </Grid>
 </Window>

@@ -10,6 +10,7 @@ namespace Semaforos.ViewModels.Commands
     public class Parametro : ICommand
     {
         public ViewModelBase ModelBase { get; set; }
+
         public event EventHandler CanExecuteChanged;
 
         public Parametro(ViewModelBase viewModel)
@@ -19,12 +20,21 @@ namespace Semaforos.ViewModels.Commands
 
         public bool CanExecute(object parameter)
         {
-            throw new NotImplementedException();
+            if (parameter != null)
+            {
+                var s = parameter as String;
+                if (String.IsNullOrEmpty(s))
+                {
+                    return true;
+                }
+                return false;
+            }
+            return false;
         }
 
         public void Execute(object parameter)
         {
-            throw new NotImplementedException();
+            this.ModelBase.ParameterMethod(parameter as String);
         }
     }
 }
