@@ -47,7 +47,7 @@ namespace Semaforos.Models
 
         public Cliente()
         {
-            Name = "";
+            Name = "F";
             LastName = "";
         }
 

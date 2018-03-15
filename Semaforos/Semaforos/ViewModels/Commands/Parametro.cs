@@ -19,8 +19,7 @@ namespace Semaforos.ViewModels.Commands
         public Parametro(Action<String> action)
         {
             _ejecutar = action;
-
-        }
+        }                      
 
         public bool CanExecute(object parameter)
         {
