@@ -10,13 +10,13 @@ namespace Semaforos.ViewModels
 {
     public class ViewModelBase
     {
-        public SimpleComand SimpleComand { get; set; }
-        public Parametro Parametro { get; set; }
+        public SimpleComand SimpleComand { get; private set; }
+        public Parametro Parametro { get; private set; }
 
         public ViewModelBase()
         {
-            this.SimpleComand = new SimpleComand(this);
-            this.Parametro = new Parametro(this);
+            SimpleComand = new SimpleComand(SimpreMethod);
+            Parametro = new Parametro(ParameterMethod);
         }
 
         public void SimpreMethod()

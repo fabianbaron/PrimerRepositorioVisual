@@ -7,19 +7,14 @@ using System.Windows.Input;
 
 namespace Semaforos.ViewModels.Commands
 {
-    public class Parametro : ICommand
+    public class ParameterCommand : ICommand
     {
         public event EventHandler CanExecuteChanged;
-        private Action<String> _ejecutar;
+        public ViewModelBase ModelBase { get; set; }
 
-        /// <summary>
-        /// Constructor
-        /// </summary>
-        /// <param name="viewModel"></param>
-        public Parametro(Action<String> action)
+        public ParameterCommand( ViewModelBase viewModel)
         {
-            _ejecutar = action;
-
+            this.ModelBase = viewModel;
         }
 
         public bool CanExecute(object parameter)
@@ -38,7 +33,7 @@ namespace Semaforos.ViewModels.Commands
 
         public void Execute(object parameter)
         {
-            _ejecutar.Invoke(parameter as String);
+            ModelBase.Parameter(parameter as String);
         }
     }
 }

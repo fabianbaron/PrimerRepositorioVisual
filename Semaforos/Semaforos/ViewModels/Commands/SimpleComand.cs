@@ -9,13 +9,12 @@ namespace Semaforos.ViewModels.Commands
 {
     public class SimpleComand : ICommand
     {
-        public ViewModelBase ViewModelBase { get; set; }
         public event EventHandler CanExecuteChanged;
+        private Action _ejecutar;
 
-
-        public SimpleComand(ViewModelBase viewModel)
+        public SimpleComand(Action action)
         {
-            this.ViewModelBase = viewModel;
+            _ejecutar = action;
         }
 
         public bool CanExecute(object parameter)
@@ -25,7 +24,7 @@ namespace Semaforos.ViewModels.Commands
 
         public void Execute(object parameter)
         {
-            ViewModelBase.SimpreMethod();
+            _ejecutar.Invoke();
         }
     }
 }
