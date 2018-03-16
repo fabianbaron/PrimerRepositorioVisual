@@ -1,4 +1,5 @@
-﻿using Semaforos.ViewModels.Commands;
+﻿using Semaforos.Models;
+using Semaforos.ViewModels.Commands;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -10,23 +11,59 @@ namespace Semaforos.ViewModels
 {
     public class ViewModelBase
     {
-        public SimpleComand SimpleComand { get; private set; }
-        public Parametro Parametro { get; private set; }
-
-        public ViewModelBase()
+        private ClienteModel Cliente = new ClienteModel();
+        
+        public String LblNombre
         {
-            SimpleComand = new SimpleComand(SimpreMethod);
-            Parametro = new Parametro(ParameterMethod);
+            get { return Cliente.Nombre; }
+            set { Cliente.Nombre = value; }
         }
 
-        public void SimpreMethod()
+        public String LblSueldo
         {
-            Debug.WriteLine("Comando...");
+            get { return Cliente.Sueldo.ToString(); }
+            set { Cliente.Sueldo = Convert.ToInt16(value); }
         }
 
-        public void ParameterMethod(String parametro)
+        public bool ChkEstadoCivil
         {
-            Debug.WriteLine(parametro);
+            get
+            {
+                if (Cliente.EstadoCivil.Equals("Casado"))
+                {
+                    return true;
+                }
+                return false;
+            }
+
+            set 
+            {
+                if(value)
+                {
+                    Cliente.EstadoCivil = "Casado";
+                }
+                else
+                {
+                    Cliente.EstadoCivil = "Soltero";
+                }
+            }
         }
+        
+        public String ColorDeFondoSueldo
+        {
+            get
+            {
+                if (Cliente.Sueldo >= 2000)
+                {
+                    return "LightGreen";
+                }
+                else if (Cliente.Sueldo > 1500)
+                {
+                    return "Yellow";
+                }
+                return "Red";
+            }
+        }
+
     }
 }
