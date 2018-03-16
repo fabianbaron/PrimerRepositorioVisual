@@ -37,7 +37,7 @@ namespace Semaforos.Models
         {
             _Nombre = "Fabián";
             _Sueldo = 3000;
-            _EstadoCivil = "Soltero";
+            _EstadoCivil = "Casado";
         }
     }
 }
