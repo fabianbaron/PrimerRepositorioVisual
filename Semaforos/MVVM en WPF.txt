@@ -1,0 +1,112 @@
+MVVM en WPF
+
+Está basado en 3 elementos:
+- Vista: Es la representación gráfica de los datos, depende de la plataforma
+- Modelo: Son los datos, toda la información y la estructura de la información
+	  (clases). Este código es independiente de la Vista y puede ser
+	  reusado incluso en otras plataformas.
+- View-Model: Es la lógica de la aplicación. Está muy relacionado con el modelo
+	      y su código también es reusable.
+
+La comunicación entre la vista y el modelo se logra a través del Binding y las
+notifications.
+
+Para el binding, se usan 2 interfaces:
+- ICommand: Vincula un evento a un comando, por ejemplo, un botón puede estar
+	vinculado al clic de un botón
+- IValueConverter: Cambia el tipo de una propiedad, por ejemplo, un texto
+	hombre o mujer en el modelo por una imágen de hombre o mujer en la
+	vista.
+
+Para las Notifications se usan 2 interfaces
+- INotifyPropertyChanged: Eleva un evento cuando cambia una propiedad y así
+	notifica a la vista que debe cambiar porque algo cambió en el modelo.
+- ObservableCollection<T>: Es similar al INotifyPropertyChanged pero en
+	colecciones. Eleva un evento cuando se agrega, cambia o elimina un
+	elemento de la colección.
+
+/-------------------------------------
+Guía de implementación de MVVM en WPF.
+--------------------------------------/
+
+- Una vez creado el proyecto o solución, se deben crear 3 carpetas:
+	- Models
+	- Views
+	- ViewModels
+
+- Crear en la carpeta Models las clases que representan los objetos y sus
+	propiedades o que interactúan fuentes de datos y adecuan dichos datos a
+	la aplicación.
+- Crear en la carpeta ViewModels las clases que exponen las propiedades de
+	los modelos (copian las propiedades de los modelos para enviarselas a
+	las vistas) y hacerlas públicas.
+- Implementar la interfaz INotifyPropertyChanged
+- Implementar "public event PropertyChangedEventHandler PropertyChanged"
+- Crear el método que eleva el evento:
+	
+	private void OnPropertyChanged(String propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+- Crear las propiedades del ViewModel usando el fragmento de código "propfull" (escribir
+	propfull y 2 veces tecla tab) y llamar en todos los set al método:
+
+	OnPropertyChanged("[Nombre de la propiedad que se desea actualizar en la View]");
+
+- Crear las propiedades del ViewModel que copien las propiedades del Model que sean de
+	interés.
+
+- Ir al código XAML
+- Insertar el namespace de la carpeta ViewModels escribiendo xmlns:vm= y escribiendo la 
+	palabra "ViewModels". Ahí saldrá la referencia "Semaforos.ViewModels" por ejemplo y
+	seleccionarla
+- Agregar un recurso de la clase
+	<Window.Resources>
+	        <vm:ViewModelBase x:Key="ViewModel1"/>
+	</Window.Resources>
+- Establecer el contexto de datos para el elemento en este caso en la Grid
+	<Grid DataContext="{Binding Source={StaticResource ViewModel1}}">
+	así todo lo que está dentro de la grid sabe que el DataContext es
+	ViewModel1
+- Hacer binding de las propiedades de los elementos de la vista buscando en la ventana
+	de propiedades del elemento en cuestión la propiedad deseada Ej: Content en un Button,
+	y hacer clic en el recuadro pequeño al lado del cuadro de texto. En el menú emergente
+	seleccionar "Crear Enlace de datos", en la ventana emergente seleccionar la opción
+	"contexto de datos" y luego seleccionar la propiedad a enlazar. Al aceptar se crea
+	automáticamente el sentido en "two way", "one way"...
+
+- Crear una carpeta Commands para los comandos. Los comandos son clases que implementan la
+	interfaz "ICommand" y tienen dos métodos que validan si está habilitado el comando 
+	(CanExecute) y qué es lo que se debe ejecutar (Execute). Además se implementa el 
+	evento "CanExecuteChanged" el cual se debe le debe agregar:
+
+	public event EventHandler CanExecuteChanged
+        {
+            add { CommandManager.RequerySuggested += value; }
+            remove { CommandManager.RequerySuggested -= value; }
+        }
+
+	si el estado CanExecute no siempre es true (Hay una forma mejor para elevar éste evento).
+- Hacerla pública, crear el constructor (ctor TAB TAB) y el código de ejecución
+- Crear una clase en la carpeta Commands con el comando que se quiera crear
+- Heredar la interfaz ICommand e implementar los métodos requeridos
+	Crea 2 métodos:
+	- CanExecute: Que indica al elemento que tiene el comando si puede o no
+		ejecutar éste comando. Retorna True o False
+	- Execute: Contiene el código de éste comando.
+- Para que todos los códigos de los comandos queden en una clase base, se crea
+	en las clases de la carpeta Command una propiedad del tipo ViewModelBase.
+- En el costructor de la clase Command recibe un objeto del tipo ViewModelBase
+	que trae el método que contiene el código que se quiere ejecutar con el
+	comando.
+- En la clase ViewModelBase se crea una propiedad del tipo de Comando y en el
+	constructor de ViewModelBase se instancia la propiedad Comando enviandole
+	la clase ViewModelBase que es la que recibe cuando el objeto de tipo
+	Comando es creado.
+- Compilar para que el intelisense se dé cuenta de los comandos creados.
+- Ir al XAML e importar el namespace de ViewModels con el nombre vm
+- En resources, agregar <vm:ViewModelBase x:Key="modelBase"/>
+- En un botón, ir a la propiedad Command y hacer clic en el cuadrado pequeño al
+	lado del textBox.
+	- En la ventana, elegir StaticResource>modelBase>SimpleCommand
