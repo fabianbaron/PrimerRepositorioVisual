@@ -1,32 +1,95 @@
-﻿using Semaforos.ViewModels.Commands;
+﻿using Semaforos.Models;
+using Semaforos.ViewModels.Commands;
 using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.ComponentModel;
+using System.Windows.Input;
 
 namespace Semaforos.ViewModels
 {
-    public class ViewModelBase
+    public class ViewModelBase : INotifyPropertyChanged
     {
-        public SimpleComand SimpleComand { get; private set; }
-        public Parametro Parametro { get; private set; }
+        private ClienteModel Cliente = new ClienteModel();
+
+        ICommand _calcularImpuestoCommand;
 
         public ViewModelBase()
         {
-            SimpleComand = new SimpleComand(SimpreMethod);
-            Parametro = new Parametro(ParameterMethod);
+            _calcularImpuestoCommand = new CalcularImpuestoCommand(CalculoImpuesto);
         }
 
-        public void SimpreMethod()
+        public ICommand CalcularImpuestoComm { get { return _calcularImpuestoCommand; } }
+        
+        public double Impuesto
         {
-            Debug.WriteLine("Comando...");
+            get { return Cliente.Impuesto; }
+        }
+        
+        public String LblNombre
+        {
+            get { return Cliente.Nombre; }
+            set { Cliente.Nombre = value; }
         }
 
-        public void ParameterMethod(String parametro)
+        public String LblSueldo
         {
-            Debug.WriteLine(parametro);
+            get { return Cliente.Sueldo.ToString(); }
+            set
+            {
+                Cliente.Sueldo = Convert.ToInt16(value);
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("ColorDeFondoSueldo"));
+            }
+        }
+
+        public bool ChkEstadoCivil
+        {
+            get
+            {
+                if (Cliente.EstadoCivil.Equals("Casado"))
+                {
+                    return true;
+                }
+                return false;
+            }
+
+            set 
+            {
+                if(value)
+                {
+                    Cliente.EstadoCivil = "Casado";
+                }
+                else
+                {
+                    Cliente.EstadoCivil = "Soltero";
+                }
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("ChkEstadoCivil"));
+            }
+        }
+        
+        public String ColorDeFondoSueldo
+        {
+            get
+            {
+                if (Cliente.Sueldo >= 2000)
+                {
+                    return "LightGreen";
+                }
+                else if (Cliente.Sueldo > 1500)
+                {
+                    return "Yellow";
+                }
+                return "Red";
+            }
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        public void CalculoImpuesto()
+        {
+            Cliente.CalcularImpuesto();
+            if(PropertyChanged != null)
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs("Impuesto"));
+            }
         }
     }
 }

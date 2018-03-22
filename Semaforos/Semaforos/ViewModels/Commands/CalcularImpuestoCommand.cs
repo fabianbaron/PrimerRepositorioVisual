@@ -7,14 +7,15 @@ using System.Windows.Input;
 
 namespace Semaforos.ViewModels.Commands
 {
-    public class SimpleComand : ICommand
+    class CalcularImpuestoCommand : ICommand
     {
-        public event EventHandler CanExecuteChanged;
-        private Action _ejecutar;
+        private Action _calcularImpuesto;
 
-        public SimpleComand(Action action)
+        public event EventHandler CanExecuteChanged;
+
+        public CalcularImpuestoCommand(Action action)
         {
-            _ejecutar = action;
+            _calcularImpuesto = action;
         }
 
         public bool CanExecute(object parameter)
@@ -24,7 +25,7 @@ namespace Semaforos.ViewModels.Commands
 
         public void Execute(object parameter)
         {
-            _ejecutar.Invoke();
+            _calcularImpuesto.Invoke();
         }
     }
 }
