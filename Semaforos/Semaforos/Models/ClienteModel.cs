@@ -36,8 +36,31 @@ namespace Semaforos.Models
         public ClienteModel()
         {
             _Nombre = "Fabián";
-            _Sueldo = 3000;
-            _EstadoCivil = "Casado";
+            _Sueldo = 0;
+            _EstadoCivil = "Soltero";
+        }
+
+        private double _Impuesto;
+
+        public double Impuesto
+        {
+            get { return _Impuesto; }
+        }
+
+        public void CalcularImpuesto()
+        {
+            if (_Sueldo > 2000)
+            {
+                _Impuesto = 20;
+            }
+            else if (_Sueldo > 1000)
+            {
+                _Impuesto = 10;
+            }
+            else
+            {
+                _Impuesto = 5;
+            }
         }
     }
 }

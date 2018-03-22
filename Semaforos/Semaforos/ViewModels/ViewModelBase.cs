@@ -1,17 +1,28 @@
 ﻿using Semaforos.Models;
 using Semaforos.ViewModels.Commands;
 using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.ComponentModel;
+using System.Windows.Input;
 
 namespace Semaforos.ViewModels
 {
-    public class ViewModelBase
+    public class ViewModelBase : INotifyPropertyChanged
     {
         private ClienteModel Cliente = new ClienteModel();
+
+        ICommand _calcularImpuestoCommand;
+
+        public ViewModelBase()
+        {
+            _calcularImpuestoCommand = new CalcularImpuestoCommand(CalculoImpuesto);
+        }
+
+        public ICommand CalcularImpuestoComm { get { return _calcularImpuestoCommand; } }
+        
+        public double Impuesto
+        {
+            get { return Cliente.Impuesto; }
+        }
         
         public String LblNombre
         {
@@ -22,7 +33,11 @@ namespace Semaforos.ViewModels
         public String LblSueldo
         {
             get { return Cliente.Sueldo.ToString(); }
-            set { Cliente.Sueldo = Convert.ToInt16(value); }
+            set
+            {
+                Cliente.Sueldo = Convert.ToInt16(value);
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("ColorDeFondoSueldo"));
+            }
         }
 
         public bool ChkEstadoCivil
@@ -46,6 +61,7 @@ namespace Semaforos.ViewModels
                 {
                     Cliente.EstadoCivil = "Soltero";
                 }
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("ChkEstadoCivil"));
             }
         }
         
@@ -65,5 +81,15 @@ namespace Semaforos.ViewModels
             }
         }
 
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        public void CalculoImpuesto()
+        {
+            Cliente.CalcularImpuesto();
+            if(PropertyChanged != null)
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs("Impuesto"));
+            }
+        }
     }
 }

@@ -7,16 +7,20 @@ using System.Windows.Input;
 
 namespace Semaforos.ViewModels.Commands
 {
-    public class Parametro : ICommand
+    public class ParametroCommand : ICommand
     {
-        public event EventHandler CanExecuteChanged;
+        public event EventHandler CanExecuteChanged
+        {
+            add { CommandManager.RequerySuggested += value; }
+            remove { CommandManager.RequerySuggested -= value; }
+        }
         private Action<String> _ejecutar;
 
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="viewModel"></param>
-        public Parametro(Action<String> action)
+        public ParametroCommand(Action<String> action)
         {
             _ejecutar = action;
         }                      

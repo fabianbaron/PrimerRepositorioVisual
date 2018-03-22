@@ -54,8 +54,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="ViewModels\Commands\Parametro.cs" />
-    <Compile Include="ViewModels\Commands\SimpleComand.cs" />
+    <Compile Include="ViewModels\Commands\CalcularImpuestoCommand.cs" />
+    <Compile Include="ViewModels\Commands\ParametroCommand.cs" />
+    <Compile Include="ViewModels\Commands\SimpleCommand.cs" />
     <Compile Include="ViewModels\ViewModelBase.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>

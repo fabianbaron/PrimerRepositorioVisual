@@ -34,43 +34,60 @@ Guía de implementación de MVVM en WPF.
 	- Views
 	- ViewModels
 
-- Crear en la carpeta Models, las clases que representan los objetos y sus
-	propiedades.
-- Heredar INotifyPropertyChanged
+- Crear en la carpeta Models las clases que representan los objetos y sus
+	propiedades o que interactúan fuentes de datos y adecuan dichos datos a
+	la aplicación.
+- Crear en la carpeta ViewModels las clases que exponen las propiedades de
+	los modelos (copian las propiedades de los modelos para enviarselas a
+	las vistas) y hacerlas públicas.
+- Implementar la interfaz INotifyPropertyChanged
 - Implementar "public event PropertyChangedEventHandler PropertyChanged"
-- Crear el método que eleva el evento
+- Crear el método que eleva el evento:
+	
 	private void OnPropertyChanged(String propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
-- Crear las propiedades del objeto usando el fragmento de código "propfull" (escribir
-	propfull y 2 veces tecla tab) y llamar en todos los get al método
-	OnPropertyChanged("[Nombre de la propiedad]");
+
+- Crear las propiedades del ViewModel usando el fragmento de código "propfull" (escribir
+	propfull y 2 veces tecla tab) y llamar en todos los set al método:
+
+	OnPropertyChanged("[Nombre de la propiedad que se desea actualizar en la View]");
+
+- Crear las propiedades del ViewModel que copien las propiedades del Model que sean de
+	interés.
 
 - Ir al código XAML
-- Insertar el namespace de la carpeta Models escribiendo xmlns:m= y escribiendo la 
-	palabra "Models". Ahí saldrá la referencia "Semaforos.Models" por ejemplo y
+- Insertar el namespace de la carpeta ViewModels escribiendo xmlns:vm= y escribiendo la 
+	palabra "ViewModels". Ahí saldrá la referencia "Semaforos.ViewModels" por ejemplo y
 	seleccionarla
 - Agregar un recurso de la clase
 	<Window.Resources>
-	        <m:Cliente x:Key="cliente1"/>
+	        <vm:ViewModelBase x:Key="ViewModel1"/>
 	</Window.Resources>
 - Establecer el contexto de datos para el elemento en este caso en la Grid
-	<Grid DataContext="{Binding Source={StaticResource cliente1}}">
+	<Grid DataContext="{Binding Source={StaticResource ViewModel1}}">
 	así todo lo que está dentro de la grid sabe que el DataContext es
-	cliente1
-- Hacer binding de las propiedades de los elementos de la vista a las propiedades
-	de los objetos definidas en las clases en una de las 2 formas y definir
-	si en un sólo sentido (Vista a modelo o modelo a vista o las 2):
-	- <Button Content="{Binding Path=Name, Mode=TwoWay}"/>
-	- <Button Content="{Binding LastName, Mode=TwoWay}"/>
+	ViewModel1
+- Hacer binding de las propiedades de los elementos de la vista buscando en la ventana
+	de propiedades del elemento en cuestión la propiedad deseada Ej: Content en un Button,
+	y hacer clic en el recuadro pequeño al lado del cuadro de texto. En el menú emergente
+	seleccionar "Crear Enlace de datos", en la ventana emergente seleccionar la opción
+	"contexto de datos" y luego seleccionar la propiedad a enlazar. Al aceptar se crea
+	automáticamente el sentido en "two way", "one way"...
 
-- Crear en la carpeta ViewModels, las clases que representan la lógica y las
-	respuestas a eventos
-- Crear una carpeta Commands para los comandos y clases que implementan la interfaz
-	ICommand
-- Crear una clase ViewModelBase en la carpeta ViewModels que contiene el código que
-	se ejecuta cuando se ejecutan los comandos
+- Crear una carpeta Commands para los comandos. Los comandos son clases que implementan la
+	interfaz "ICommand" y tienen dos métodos que validan si está habilitado el comando 
+	(CanExecute) y qué es lo que se debe ejecutar (Execute). Además se implementa el 
+	evento "CanExecuteChanged" el cual se debe le debe agregar:
+
+	public event EventHandler CanExecuteChanged
+        {
+            add { CommandManager.RequerySuggested += value; }
+            remove { CommandManager.RequerySuggested -= value; }
+        }
+
+	si el estado CanExecute no siempre es true (Hay una forma mejor para elevar éste evento).
 - Hacerla pública, crear el constructor (ctor TAB TAB) y el código de ejecución
 - Crear una clase en la carpeta Commands con el comando que se quiera crear
 - Heredar la interfaz ICommand e implementar los métodos requeridos

@@ -3,18 +3,16 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:Semaforos"
-        xmlns:m="clr-namespace:Semaforos.Models"
         xmlns:vm="clr-namespace:Semaforos.ViewModels"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
 
     <Window.Resources>
-        <m:ClienteModel x:Key="cliente1"/>
         <vm:ViewModelBase x:Key="modelBase"/>
     </Window.Resources>
-    <Grid DataContext="{Binding Source={StaticResource cliente1}}" VerticalAlignment="Top">
+    <Grid DataContext="{DynamicResource modelBase}" VerticalAlignment="Top">
         <Grid.RowDefinitions>
+            <RowDefinition/>
             <RowDefinition/>
             <RowDefinition/>
             <RowDefinition/>
@@ -27,8 +25,11 @@
         <Label Grid.Row="0" Grid.Column="0" Content="Nombre del cliente"/>
         <Label Grid.Row="1" Grid.Column="0" Content="Sueldo"/>
         <Label Grid.Row="3" Grid.Column="0" Content="Estado Civil"/>
-        <Label Grid.Row="0" Grid.Column="1" Content="{Binding LblNombre, Source={StaticResource modelBase}}"/>
-        <Label Grid.Row="1" Grid.Column="1" Content="{Binding LblSueldo, Source={StaticResource modelBase}}" Background="{Binding ColorDeFondoSueldo, Mode=OneWay, Source={StaticResource modelBase}}"/>
-        <CheckBox Grid.Row="3" Grid.Column="1" IsChecked="{Binding ChkEstadoCivil, Source={StaticResource modelBase}}"/>
+        <Label Grid.Row="0" Grid.Column="1" Content="{Binding LblNombre}"/>
+        <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding LblSueldo}" 
+                 Background="{Binding ColorDeFondoSueldo, Mode=OneWay}"/>
+        <CheckBox Grid.Row="3" Grid.Column="1" IsChecked="{Binding ChkEstadoCivil}"/>
+        <Button Grid.Row="4" Grid.Column="0" Content="Calcular impuesto" Command="{Binding CalcularImpuestoComm, Mode=OneWay}"/>
+        <Label Grid.Row="4" Grid.Column="1" Content="{Binding Impuesto, Mode=OneWay}" />
     </Grid>
 </Window>
